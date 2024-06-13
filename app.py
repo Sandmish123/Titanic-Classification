@@ -2,6 +2,8 @@ import streamlit as st
 import joblib
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 # Load your trained models
 svm_model = joblib.load('svm.pkl')
@@ -11,56 +13,73 @@ knn_model = joblib.load('KNN.pkl')
 decision_tree_model = joblib.load('Decision_tree.pkl')
 logistic_regression_model = joblib.load('Logistic_regression.pkl')
 
+# Load dataset for EDA
+data = pd.read_csv('titanic_data.csv')
+
 # Function to preprocess inputs
 def preprocess_input(pclass, sex, age, fare):
-    # Convert sex to numerical
     sex_num = 1 if sex == 'male' else 0
-    # Create a numpy array with the processed features
     features = np.array([pclass, sex_num, age, fare])
     return features
 
 # Function to make predictions
 def predict(model, features):
     prediction = model.predict(features.reshape(1, -1))
-    return prediction[0]  # Return the predicted class (0 or 1)
+    return prediction[0]
 
-def main():
-    st.title('Titanic Survival Prediction App')
-    st.write('Enter the values to predict survival on the Titanic')
+# Sidebar for user input
+st.sidebar.title('User Input')
+st.sidebar.write('Provide passenger details:')
 
-    # User inputs for prediction
-    age = st.slider('Age', 0, 100, 30)
-    fare = st.slider('Fare', 0.0, 100.0, 30.0)
-    pclass = st.selectbox('Pclass', [1, 2, 3])
-    sex = st.selectbox('Sex', ['male', 'female'])
+age = st.sidebar.slider('Age', 0, 100, 30)
+fare = st.sidebar.slider('Fare', 0.0, 100.0, 30.0)
+pclass = st.sidebar.selectbox('Pclass', [1, 2, 3])
+sex = st.sidebar.selectbox('Sex', ['male', 'female'])
 
-    # Model selection
-    model_choice = st.selectbox('Select Model', ['SVM', 'Random Forest', 'Naive Bayes', 'KNN', 'Decision Tree', 'Logistic Regression'])
+# Sidebar for model selection
+model_choice = st.sidebar.selectbox('Select Model', ['SVM', 'Random Forest', 'Naive Bayes', 'KNN', 'Decision Tree', 'Logistic Regression'])
 
-    # Prediction button
-    if st.button('Predict'):
-        # Preprocess the input features
-        features = preprocess_input(pclass, sex, age, fare)
+# Main page
+st.title('Titanic Survival Prediction App')
+st.write('Enter the values on the sidebar to predict survival on the Titanic.')
 
-        # Make prediction based on the selected model
-        if model_choice == 'SVM':
-            prediction = predict(svm_model, features)
-        elif model_choice == 'Random Forest':
-            prediction = predict(random_forest_model, features)
-        elif model_choice == 'Naive Bayes':
-            prediction = predict(naive_bayes_model, features)
-        elif model_choice == 'KNN':
-            prediction = predict(knn_model, features)
-        elif model_choice == 'Decision Tree':
-            prediction = predict(decision_tree_model, features)
-        elif model_choice == 'Logistic Regression':
-            prediction = predict(logistic_regression_model, features)
+if st.sidebar.button('Predict'):
+    features = preprocess_input(pclass, sex, age, fare)
 
-        # Display prediction result
-        if prediction == 1:
-            st.success('The model predicts that the passenger would survive.')
-        else:
-            st.error('The model predicts that the passenger would not survive.')
+    if model_choice == 'SVM':
+        prediction = predict(svm_model, features)
+    elif model_choice == 'Random Forest':
+        prediction = predict(random_forest_model, features)
+    elif model_choice == 'Naive Bayes':
+        prediction = predict(naive_bayes_model, features)
+    elif model_choice == 'KNN':
+        prediction = predict(knn_model, features)
+    elif model_choice == 'Decision Tree':
+        prediction = predict(decision_tree_model, features)
+    elif model_choice == 'Logistic Regression':
+        prediction = predict(logistic_regression_model, features)
 
-if __name__ == '__main__':
-    main()
+    st.subheader('Prediction Result')
+    if prediction == 1:
+        st.success('The model predicts that the passenger would survive.')
+    else:
+        st.error('The model predicts that the passenger would not survive.')
+
+# EDA Section
+st.sidebar.markdown('---')
+st.sidebar.title('Explore Dataset')
+if st.sidebar.checkbox('Show Dataset'):
+    st.subheader('Titanic Dataset')
+    st.write(data)
+
+# Display correlation heatmap
+if st.sidebar.checkbox('Show Correlation Heatmap'):
+    st.subheader('Correlation Heatmap')
+    corr = data.corr()
+    fig, ax = plt.subplots()
+    sns.heatmap(corr, ax=ax, annot=True, cmap='coolwarm')
+    st.pyplot(fig)
+
+# Footer
+st.sidebar.markdown("---")
+st.sidebar.markdown("Developed by [Your Name](https://your-linkedin-profile)")
