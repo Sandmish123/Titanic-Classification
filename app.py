@@ -89,6 +89,109 @@
 
 
 
+# import streamlit as st
+# import joblib
+# import pandas as pd
+# import numpy as np
+
+# # Load your trained models
+# svm_model = joblib.load('svm.pkl')
+# random_forest_model = joblib.load('random_forest.pkl')
+# naive_bayes_model = joblib.load('Naive_bayes.pkl')
+# knn_model = joblib.load('KNN.pkl')
+# decision_tree_model = joblib.load('Decision_tree.pkl')
+# logistic_regression_model = joblib.load('Logistic_regression.pkl')
+
+# # Function to preprocess inputs
+# def preprocess_input(pclass, sex, age, fare):
+#     sex_num = 1 if sex == 'male' else 0
+#     features = np.array([pclass, sex_num, age, fare])
+#     return features
+
+# # Function to make predictions
+# def predict(model, features):
+#     prediction = model.predict(features.reshape(1, -1))
+#     return prediction[0]
+
+# # Main page
+# st.title('🚢 Titanic Survival Prediction App')
+# st.write('Enter the values on the sidebar to predict survival on the Titanic.')
+
+# st.markdown('---')
+
+# st.subheader('📝 User Guide')
+# st.write("""
+# This app predicts whether a passenger would survive the Titanic disaster based on the following features:
+
+# - **Age**: The age of the passenger.
+# - **Fare**: The fare paid by the passenger.
+# - **Pclass**: The class of the ticket (1, 2, or 3).
+# - **Sex**: The gender of the passenger.
+
+# Select a model from the dropdown on the sidebar and click 'Predict' to see the results.
+# """)
+
+# st.markdown('---')
+
+# st.subheader('📜 Historical Insights')
+# st.write("""
+# From historical data, we know:
+# - **Higher class passengers (Pclass 1)** had a higher survival rate.
+# - **Women and children** had higher survival rates.
+# - **Lower fares** were associated with lower survival rates.
+# """)
+
+# st.markdown('---')
+
+# # Sidebar for model selection
+# st.sidebar.title('🔧 Model Selection')
+# model_choice = st.sidebar.selectbox('Select Model', ['SVM', 'Random Forest', 'Naive Bayes', 'KNN', 'Decision Tree', 'Logistic Regression'])
+
+# # Sidebar for user input
+# st.sidebar.title('User Input')
+# st.sidebar.write('Provide passenger details:')
+
+# age = st.sidebar.slider('Age', 0, 100, 30)
+# fare = st.sidebar.slider('Fare', 0.0, 100.0, 30.0)
+# pclass = st.sidebar.selectbox('Pclass', [1, 2, 3])
+# sex = st.sidebar.selectbox('Sex', ['male', 'female'])
+
+# if st.sidebar.button('Predict'):
+#     features = preprocess_input(pclass, sex, age, fare)
+
+#     if model_choice == 'SVM':
+#         prediction = predict(svm_model, features)
+#     elif model_choice == 'Random Forest':
+#         prediction = predict(random_forest_model, features)
+#     elif model_choice == 'Naive Bayes':
+#         prediction = predict(naive_bayes_model, features)
+#     elif model_choice == 'KNN':
+#         prediction = predict(knn_model, features)
+#     elif model_choice == 'Decision Tree':
+#         prediction = predict(decision_tree_model, features)
+#     elif model_choice == 'Logistic Regression':
+#         prediction = predict(logistic_regression_model, features)
+
+#     st.subheader('🔍 Prediction Result')
+#     if prediction == 1:
+#         st.success('🟢 The model predicts that the passenger would survive.')
+#     else:
+#         st.error('🔴 The model predicts that the passenger would not survive.')
+
+# st.sidebar.markdown("---")
+# st.sidebar.markdown("Developed by [Sandeep Mishra](https://your-linkedin-profile)")
+
+
+# # # Footer
+# # st.sidebar.markdown("---")
+# # st.sidebar.markdown("Developed by [Sandeep Mishra](https://your-linkedin-profile)")
+
+
+
+
+
+
+
 import streamlit as st
 import joblib
 import pandas as pd
@@ -175,13 +278,11 @@ if st.sidebar.button('Predict'):
     st.subheader('🔍 Prediction Result')
     if prediction == 1:
         st.success('🟢 The model predicts that the passenger would survive.')
+        st.image("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTeUDp9A2r1VaNLnbxOgz6HI_KL7jQtV2-Kvw&s", width=150, caption='Survive')
     else:
         st.error('🔴 The model predicts that the passenger would not survive.')
+        st.image("https://www.shutterstock.com/shutterstock/photos/2176404447/display_1500/stock-vector-high-quality-emoticon-on-white-background-dead-emoji-yellow-face-with-x-s-or-spiral-eyes-and-2176404447.jpg", width=150, caption='Not Survive')
 
 st.sidebar.markdown("---")
 st.sidebar.markdown("Developed by [Sandeep Mishra](https://your-linkedin-profile)")
 
-
-# # Footer
-# st.sidebar.markdown("---")
-# st.sidebar.markdown("Developed by [Sandeep Mishra](https://your-linkedin-profile)")
